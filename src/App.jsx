@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
+import Chart from './components/grafica';
 
 function App() {
     const [data, setData] = useState([]);
+    const [ticker, setTicker] = useState('');
 
     async function getData() {
-        const ticker = document.getElementById('ticker').value;
+        setData([]);
+        const tickerI = document.getElementById('ticker').value;
         const tipo = document.getElementById('tipo').value;
         const time = document.getElementById('time').value;
 
         try {
-            const response = await fetch(`http://localhost:5000/predict?ticker=${ticker}&time=${time}&tipo=${tipo}`);
+            const response = await fetch(`http://localhost:5000/predict?ticker=${tickerI}&time=${time}&tipo=${tipo}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setData(data);
-            console.log(data);
+            setData(data.data);
+            setTicker(tickerI);
+            
         } catch (error) {
             console.error('There was an error!', error);
+            setData([]);
         }
     }
 
@@ -40,6 +45,7 @@ function App() {
                 <option value="Maximo">Desde que está en bolsa</option>
             </select>
             <button onClick={getData}>Consultar</button>
+            {data.length > 0 ? <Chart listaDatos={data} ticker={ticker} /> : null}
         </>
     );
 }
