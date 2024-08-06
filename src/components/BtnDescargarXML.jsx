@@ -40,7 +40,7 @@ function BtnDescargarXML({dataJSON, fileName}) {
 
         }
         return (
-            <button onClick={descargarXML}>XML</button>
+            <button onClick={descargarXML} className="btnXML">XML</button>
         );
     }
     

@@ -46,6 +46,7 @@ function App() {
     async function getData() {
         // bloquear el botón mientras se hace la petición
         document.getElementById('btnConsultar').disabled = true;
+        setError("")
         setData([]);
         const tickerI = document.getElementById('ticker').value;
         const tipo = document.getElementById('tipo').value;
@@ -57,18 +58,25 @@ function App() {
 
         try {
             setNombreArchivo(tickerI+'_'+tipo+'_'+time);
-            // const response = await fetch(`http://localhost:5000/predict?ticker=${tickerI}&time=${time}&tipo=${tipo}`);
-            const response = await fetch(`http://192.168.1.73:5000/predict?ticker=${tickerI}&time=${time}&tipo=${tipo}`);
+            const response = await fetch(`http://localhost:5000/predict?ticker=${tickerI}&time=${time}&tipo=${tipo}`);
             if (!response.ok) {
                 setError('Error en la petición');
                 setData([]);
                 setNombreArchivo('');
+            }else{
+                const data = await response.json();
+                if (data.data){
+                    setData(data.data);
+                    setTicker(tickerI);
+                    setError('');                       
+                }
+                else{
+                    setData([])
+                    setTicker(ticker)
+                    setError("Error en la conexión");
+                }
+                   
             }
-            const data = await response.json();
-            setData(data.data);
-            setTicker(tickerI);
-            setError('');
-            
         } catch (error) {
             setError('Error en la petición');
             setData([]);
@@ -82,7 +90,9 @@ function App() {
             <Header />
             <Main>
                 <div className='datos'>
+
                     <section className='formulario'>
+                        <h2>Consultar precio de una acción</h2>
                         <input type="text" placeholder="BMV de la empresa" id="ticker" />
                         <select id="tipo" name='tipo'>
                             <option value="Cierre">Cierre</option>
@@ -90,6 +100,7 @@ function App() {
                             <option value="Alto">Alto</option>
                             <option value="Bajo">Bajo</option>
                         </select>
+
                         <select id="time" name='time'>
                             <option value="inicioAño">Desde el inicio del año</option>
                             <option value="1">1 año</option>
@@ -98,15 +109,28 @@ function App() {
                             <option value="10">10 años</option>
                             <option value="Maximo">Desde que está en bolsa</option>
                         </select>
+    
                         <button onClick={getData} id='btnConsultar'>Consultar</button>
                     </section>
-
-                    <section className='grafica'>
-                        {data.length > 0 ? <Chart listaDatos={data} ticker={ticker} /> : null}
-                        {data.length > 0 ? <BtnDescargarJSON dataJSON={data} fileName={nombreArchivo} /> : null}
-                        {data.length > 0 ? <BtnDescargarCSV dataJSON={data} fileName={nombreArchivo} /> : null}
-                        {data.length > 0 ? <BtnDescargarXML dataJSON={data} fileName={nombreArchivo} /> : null}   
-                    </section>
+                    {
+                        data.length > 0 ? 
+                            <section className='grafica'>
+                                <Chart listaDatos={data} ticker={ticker} />
+                            </section>                        
+                        : 
+                            null
+                    }
+                    {
+                        data.length > 0 ?
+                            <section className="botonesDescargas">
+                                <p>Descargar</p> {/* Se agrega un mensaje para indicar que se pueden descargar los datos */}
+                                <BtnDescargarJSON dataJSON={data} fileName={nombreArchivo} />
+                                <BtnDescargarCSV dataJSON={data} fileName={nombreArchivo} />
+                                <BtnDescargarXML dataJSON={data} fileName={nombreArchivo} />
+                            </section>
+                        :
+                            null
+                    }
                 </div>
                 {error.length > 0 ? <VentanaError mensaje={error} /> : null}                
             </Main>

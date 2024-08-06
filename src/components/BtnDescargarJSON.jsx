@@ -13,7 +13,7 @@ function BtnDescargarJSON({dataJSON, fileName}) {
     }
     
     return (
-        <button onClick={descargarJSON}>JSON</button>
+        <button onClick={descargarJSON} className="btnJSON">JSON</button>
     );
 }
 

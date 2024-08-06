@@ -37,7 +37,7 @@ function BtnDescargarCSV({dataJSON, fileName}) {
         window.URL.revokeObjectURL
     }
     return (
-        <button onClick={descargarCSV}>CSV</button>
+        <button onClick={descargarCSV} className="btnCSV">CSV</button>
     );
 }
 

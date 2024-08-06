@@ -1,11 +1,11 @@
-
+import "../CSS/VentanaError.css"
 
 function VentanaError({ mensaje }) {
     return (
         <>
             <dialog open>
                 <p>{mensaje}</p>
-                <button onClick={() => window.location.reload()}>Cerrar</button>
+                <button onClick={() => document.querySelector('dialog').close()}>Cerrar</button>
             </dialog>
         </>
     );
