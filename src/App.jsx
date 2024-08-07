@@ -3,6 +3,7 @@ import Chart from './components/grafica';
 import BtnDescargarJSON from './components/BtnDescargarJSON';
 import BtnDescargarCSV from './components/BtnDescargarCSV';
 import BtnDescargarXML from './components/BtnDescargarXML';
+import BtnDescargarSQL from './components/BtnDescargarSQL';
 import VentanaError from './components/VentanaError';
 import Header from './components/Header';
 import Main from './components/Main';
@@ -127,6 +128,7 @@ function App() {
                                 <BtnDescargarJSON dataJSON={data} fileName={nombreArchivo} />
                                 <BtnDescargarCSV dataJSON={data} fileName={nombreArchivo} />
                                 <BtnDescargarXML dataJSON={data} fileName={nombreArchivo} />
+                                <BtnDescargarSQL dataJSON={data} fileName={nombreArchivo} />
                             </section>
                         :
                             null
