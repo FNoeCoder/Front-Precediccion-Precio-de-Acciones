@@ -5,7 +5,7 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 100px;
+  padding-bottom: 100px;
   background-color: #ECF0F1;
 }
 main .datos {
@@ -125,7 +125,10 @@ main .datos .botonesDescargas {
   z-index: 101;
 }
 main .datos .botonesDescargas button {
-  width: 50px;
+  min-width: 50px;
+  width: -moz-max-content;
+  width: max-content;
+  max-width: 100px;
   height: 30px;
   padding: 4px;
   margin: 4px;

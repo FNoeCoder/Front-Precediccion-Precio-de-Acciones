@@ -4,12 +4,16 @@ import BtnDescargarJSON from './components/BtnDescargarJSON';
 import BtnDescargarCSV from './components/BtnDescargarCSV';
 import BtnDescargarXML from './components/BtnDescargarXML';
 import BtnDescargarSQL from './components/BtnDescargarSQL';
+import BtnDescargarIMG from './components/BtnDescargarIMG';
+import BtnDescargarEDA from './components/BtnDescargarEDA';
 import VentanaError from './components/VentanaError';
 import Header from './components/Header';
 import Main from './components/Main';
 
 function App() {
     const [data, setData] = useState([]);
+    const [dataIMG, setDataIMG] = useState("");
+    const [dataIMGEDA, setDataIMGEDA] = useState("");
     const [ticker, setTicker] = useState('');
     const [nombreArchivo, setNombreArchivo] = useState('');
     const [error, setError] = useState('');
@@ -49,6 +53,8 @@ function App() {
         document.getElementById('btnConsultar').disabled = true;
         setError("")
         setData([]);
+        setDataIMG("");
+        setDataIMGEDA("");
         const tickerI = document.getElementById('ticker').value;
         const tipo = document.getElementById('tipo').value;
         const time = document.getElementById('time').value;
@@ -64,17 +70,23 @@ function App() {
                 setError('Error en la petición');
                 setData([]);
                 setNombreArchivo('');
+                setDataIMG("");
+                setDataIMGEDA("");
             }else{
                 const data = await response.json();
                 if (data.data){
                     setData(data.data);
                     setTicker(tickerI);
-                    setError('');                       
+                    setError('');    
+                    setDataIMG(data.grafico);                 
+                    setDataIMGEDA(data.graficoEDA);  
                 }
                 else{
                     setData([])
                     setTicker(ticker)
+                    setDataIMG("");
                     setError("Error en la conexión");
+                    setDataIMGEDA("");
                 }
                    
             }
@@ -82,6 +94,8 @@ function App() {
             setError('Error en la petición');
             setData([]);
             setNombreArchivo('');
+            setDataIMG("");
+            setDataIMGEDA("");
         }
         document.getElementById('btnConsultar').disabled = false;
     }
@@ -124,11 +138,12 @@ function App() {
                     {
                         data.length > 0 ?
                             <section className="botonesDescargas">
-                                <p>Descargar</p> {/* Se agrega un mensaje para indicar que se pueden descargar los datos */}
                                 <BtnDescargarJSON dataJSON={data} fileName={nombreArchivo} />
                                 <BtnDescargarCSV dataJSON={data} fileName={nombreArchivo} />
                                 <BtnDescargarXML dataJSON={data} fileName={nombreArchivo} />
                                 <BtnDescargarSQL dataJSON={data} fileName={nombreArchivo} />
+                                <BtnDescargarIMG ImgBase64={dataIMG} fileName={nombreArchivo} />
+                                <BtnDescargarEDA ImgBase64={dataIMGEDA} fileName={nombreArchivo} />
                             </section>
                         :
                             null
